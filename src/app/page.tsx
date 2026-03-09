@@ -1,19 +1,31 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   Industry,
   BusinessObjective,
   Channel,
   ChannelPlanInput,
   PlannerInput,
+  PlannerOutput,
 } from '@/lib/types';
 import {
   getAvailableChannels,
   getValidFormatsForChannel,
 } from '@/lib/benchmarks';
+import { runPlanner } from '@/lib/engine';
+import { INDUSTRY_LABELS, OBJECTIVE_LABELS } from '@/lib/constants';
 import PlannerSettings from '@/components/PlannerSettings';
 import ChannelPlanningGrid from '@/components/ChannelPlanningGrid';
+import {
+  ForecastTable,
+  BenchmarkFitPanel,
+  RecommendedMix,
+  WarningsPanel,
+  CapacityUtilization,
+  DiagnosticsPanel,
+} from '@/components/dashboard';
+import ScenarioCompare from '@/components/ScenarioCompare';
 
 const ALL_CHANNELS: Channel[] = [
   Channel.Instagram,
@@ -60,6 +72,7 @@ export default function Home() {
   const [channelPlans, setChannelPlans] = useState<Record<Channel, ChannelPlanInput>>(
     buildDefaultPlans
   );
+  const [snapshotOutput, setSnapshotOutput] = useState<PlannerOutput | null>(null);
 
   // When industry changes: update channel availability, reset CVR defaults, update format options
   const handleIndustryChange = useCallback((newIndustry: Industry) => {
@@ -73,14 +86,12 @@ export default function Home() {
           next.add(ch);
         }
       }
-      // If nothing was kept, enable all available
       if (next.size === 0) {
         return new Set(available);
       }
       return next;
     });
 
-    // Reset plans: update formats and clear custom CVRs
     setChannelPlans((prev) => {
       const next = { ...prev };
       for (const ch of ALL_CHANNELS) {
@@ -90,7 +101,7 @@ export default function Home() {
         next[ch] = {
           ...next[ch],
           format: formatStillValid ? currentFormat : validFormats[0],
-          destinationCVR: undefined, // reset to benchmark default
+          destinationCVR: undefined,
         };
       }
       return next;
@@ -106,7 +117,7 @@ export default function Home() {
       for (const ch of ALL_CHANNELS) {
         next[ch] = {
           ...next[ch],
-          destinationCVR: undefined, // reset to benchmark default for new objective
+          destinationCVR: undefined,
         };
       }
       return next;
@@ -132,8 +143,8 @@ export default function Home() {
     }));
   }, []);
 
-  // Build the PlannerInput for downstream consumption (Task 6 will wire this to the engine)
-  const plannerInput: PlannerInput = {
+  // Build the PlannerInput from current state
+  const plannerInput: PlannerInput = useMemo(() => ({
     industry,
     objective,
     channelPlans: ALL_CHANNELS
@@ -141,16 +152,34 @@ export default function Home() {
       .map((ch) => channelPlans[ch]),
     monthlyAvailableHours,
     valuePerConversion,
-  };
+  }), [industry, objective, enabledChannels, channelPlans, monthlyAvailableHours, valuePerConversion]);
 
-  // Calculate total planned hours for capacity display
+  // Run the planner engine on every input change
+  const plannerOutput: PlannerOutput = useMemo(
+    () => runPlanner(plannerInput),
+    [plannerInput]
+  );
+
+  // Capacity utilization from engine output
+  const capacityPct = Math.round(plannerOutput.capacityUtilization * 100);
   const totalPlannedHours = plannerInput.channelPlans.reduce(
     (sum, p) => sum + p.productionHours,
     0
   );
-  const capacityPct = monthlyAvailableHours > 0
-    ? Math.round((totalPlannedHours / monthlyAvailableHours) * 100)
-    : 0;
+
+  // Check if there's meaningful data to show forecasts
+  const hasActiveData = plannerOutput.channelForecasts.some(
+    (f) => f.forecastTraffic > 0 || f.forecastConversions > 0
+  );
+
+  // Scenario compare handlers
+  const handleSnapshot = useCallback(() => {
+    setSnapshotOutput(plannerOutput);
+  }, [plannerOutput]);
+
+  const handleClearSnapshot = useCallback(() => {
+    setSnapshotOutput(null);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -161,7 +190,7 @@ export default function Home() {
               Content Strategy Planner
             </h1>
             <p className="text-text-secondary text-[11px] mt-1.5 tracking-wide">
-              Monthly content allocation and forecast
+              Monthly content allocation — {INDUSTRY_LABELS[industry]} · {OBJECTIVE_LABELS[objective]}
             </p>
           </div>
         </div>
@@ -212,13 +241,74 @@ export default function Home() {
           onUpdatePlan={handleUpdatePlan}
         />
 
-        {/* Placeholder for output dashboard (Task 6 will wire this to the engine) */}
-        {plannerInput.channelPlans.length > 0 && valuePerConversion > 0 && (
+        {/* Output Section */}
+        {plannerInput.channelPlans.length === 0 ? (
+          <div className="bg-surface rounded-lg p-6 border border-surface-border">
+            <p className="text-sm text-text-secondary">Enable at least one channel to see forecasts.</p>
+          </div>
+        ) : !hasActiveData && valuePerConversion === 0 ? (
           <div className="bg-surface rounded-lg p-6 border border-surface-border">
             <p className="text-sm text-text-secondary">
-              Forecast output will appear here once connected to the planning engine.
+              Enter content units, traffic per unit, and value per conversion to generate forecasts.
             </p>
           </div>
+        ) : (
+          <>
+            {/* KPI summary row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <KPICard
+                label="Forecast Traffic"
+                value={Math.round(plannerOutput.totalForecastTraffic).toLocaleString()}
+              />
+              <KPICard
+                label="Forecast Conversions"
+                value={Math.round(plannerOutput.totalForecastConversions).toLocaleString()}
+              />
+              <KPICard
+                label="Forecast Revenue"
+                value={'$' + Math.round(plannerOutput.totalForecastRevenue).toLocaleString()}
+                highlight
+              />
+            </div>
+
+            {/* Forecast Table */}
+            <ForecastTable
+              forecasts={plannerOutput.channelForecasts}
+              totalTraffic={plannerOutput.totalForecastTraffic}
+              totalConversions={plannerOutput.totalForecastConversions}
+              totalRevenue={plannerOutput.totalForecastRevenue}
+            />
+
+            {/* Benchmark Fit + Capacity Utilization */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+              <div className="lg:col-span-3">
+                <BenchmarkFitPanel forecasts={plannerOutput.channelForecasts} />
+              </div>
+              <div className="lg:col-span-2">
+                <CapacityUtilization
+                  utilization={plannerOutput.capacityUtilization}
+                  mix={plannerOutput.recommendedMix}
+                />
+              </div>
+            </div>
+
+            {/* Recommended Mix */}
+            <RecommendedMix mix={plannerOutput.recommendedMix} />
+
+            {/* Warnings + Diagnostics */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <WarningsPanel warnings={plannerOutput.warnings} />
+              <DiagnosticsPanel forecasts={plannerOutput.channelForecasts} />
+            </div>
+
+            {/* Scenario Compare */}
+            <ScenarioCompare
+              currentOutput={plannerOutput}
+              snapshotOutput={snapshotOutput}
+              onSnapshot={handleSnapshot}
+              onClearSnapshot={handleClearSnapshot}
+            />
+          </>
         )}
       </main>
 
@@ -229,6 +319,17 @@ export default function Home() {
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function KPICard({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className="bg-surface rounded-lg border border-surface-border px-5 py-4">
+      <div className="text-text-secondary text-[10px] uppercase tracking-[0.08em] mb-2 leading-none">{label}</div>
+      <div className={`text-2xl font-mono font-semibold leading-none ${highlight ? 'text-status-strong' : 'text-text-primary'}`}>
+        {value}
+      </div>
     </div>
   );
 }
