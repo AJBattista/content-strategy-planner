@@ -32,10 +32,11 @@ export default function ChannelPlanRow({
           <label className="block text-xs text-secondary mb-1">Monthly Content Units</label>
           <input
             type="number"
+            inputMode="decimal"
             min={0}
             value={plan.monthlyUnits}
             onChange={(e) => onUpdate({ monthlyUnits: Math.max(0, Number(e.target.value)) })}
-            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
+            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
         </div>
@@ -61,10 +62,11 @@ export default function ChannelPlanRow({
           <label className="block text-xs text-secondary mb-1">Avg Traffic per Unit</label>
           <input
             type="number"
+            inputMode="decimal"
             min={0}
             value={plan.trafficPerUnit}
             onChange={(e) => onUpdate({ trafficPerUnit: Math.max(0, Number(e.target.value)) })}
-            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
+            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
         </div>
@@ -74,11 +76,12 @@ export default function ChannelPlanRow({
           <label className="block text-xs text-secondary mb-1">Production Hours / Mo</label>
           <input
             type="number"
+            inputMode="decimal"
             min={0}
             step="0.5"
             value={plan.productionHours}
             onChange={(e) => onUpdate({ productionHours: Math.max(0, Number(e.target.value)) })}
-            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
+            className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
         </div>
@@ -89,6 +92,7 @@ export default function ChannelPlanRow({
           <div className="flex items-center gap-2">
             <input
               type="number"
+              inputMode="decimal"
               min={0}
               max={100}
               step="0.1"
@@ -97,7 +101,7 @@ export default function ChannelPlanRow({
                 const pct = Number(e.target.value);
                 onUpdate({ destinationCVR: Math.max(0, pct / 100) });
               }}
-              className={`flex-1 bg-background border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums ${
+              className={`flex-1 bg-background border rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums ${
                 useCustomCVR ? 'border-status-amber/40' : 'border-secondary/20'
               }`}
             />

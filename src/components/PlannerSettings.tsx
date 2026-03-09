@@ -77,10 +77,11 @@ export default function PlannerSettings({
           <label className="block text-sm text-secondary mb-2">Monthly Production Hours</label>
           <input
             type="number"
+            inputMode="decimal"
             min={0}
             value={monthlyAvailableHours}
             onChange={(e) => onHoursChange(Math.max(0, Number(e.target.value)))}
-            className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
+            className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="e.g. 160"
           />
         </div>
@@ -90,11 +91,12 @@ export default function PlannerSettings({
           <label className="block text-sm text-secondary mb-2">Value per Conversion ($)</label>
           <input
             type="number"
+            inputMode="decimal"
             min={0}
             step="0.01"
             value={valuePerConversion}
             onChange={(e) => onValueChange(Math.max(0, Number(e.target.value)))}
-            className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
+            className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="e.g. 50"
           />
           <p className="text-xs text-secondary/70 mt-1.5">{profile.valuePerConversionGuidance}</p>
