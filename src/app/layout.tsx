@@ -15,7 +15,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Content Strategy Planner",
-  description: "Monthly content allocation tool for marketing leaders",
+  description: "Monthly content allocation and forecast tool",
 };
 
 export default function RootLayout({

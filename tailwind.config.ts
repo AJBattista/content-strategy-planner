@@ -25,11 +25,20 @@ const config: Config = {
         'text-secondary': '#7d8499',
         'text-tertiary': '#565c6e',
 
-        // Status
+        // Legacy alias used by input form components
+        secondary: '#7d8499',
+
+        // Status colors
         'status-neutral': '#5b8fb9',
         'status-strong': '#4a9e8e',
         'status-caution': '#c49229',
         'status-weak': '#b05050',
+
+        // Legacy status aliases used by input form components
+        'status-steel': '#5b8fb9',
+        'status-teal': '#4a9e8e',
+        'status-amber': '#c49229',
+        'status-red': '#b05050',
 
         // Channel accents
         'channel-instagram': '#a8467a',
