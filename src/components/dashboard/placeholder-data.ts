@@ -1,0 +1,137 @@
+import {
+  Channel,
+  ChannelForecast,
+  RecommendedChannelMix,
+  PlannerWarning,
+  PlannerOutput,
+} from '@/lib/types';
+
+const placeholderForecasts: ChannelForecast[] = [
+  {
+    channel: Channel.Instagram,
+    forecastTraffic: 8800,
+    forecastConversions: 123,
+    forecastRevenue: 18450,
+    benchmarkFit: 'Strong Fit',
+    cadenceMultiplier: 1.0,
+    formatMultiplier: 1.1,
+    destinationCVR: 0.014,
+    revenuePerUnit: 922.50,
+    revenuePerHour: 461.25,
+    diagnostics: {
+      type: 'social',
+      impressions: 240400,
+      engagementRate: 0.0366,
+      engagements: 8799,
+    },
+  },
+  {
+    channel: Channel.TikTok,
+    forecastTraffic: 3150,
+    forecastConversions: 44,
+    forecastRevenue: 6615,
+    benchmarkFit: 'Viable',
+    cadenceMultiplier: 1.0,
+    formatMultiplier: 1.1,
+    destinationCVR: 0.014,
+    revenuePerUnit: 551.25,
+    revenuePerHour: 330.75,
+    diagnostics: {
+      type: 'social',
+      impressions: 181000,
+      engagementRate: 0.0174,
+      engagements: 3149,
+    },
+  },
+  {
+    channel: Channel.LinkedIn,
+    forecastTraffic: 1920,
+    forecastConversions: 27,
+    forecastRevenue: 4032,
+    benchmarkFit: 'Weak Fit',
+    cadenceMultiplier: 0.9,
+    formatMultiplier: 1.0,
+    destinationCVR: 0.014,
+    revenuePerUnit: 2016,
+    revenuePerHour: 201.60,
+    diagnostics: {
+      type: 'social',
+      impressions: 46300,
+      engagementRate: 0.0415,
+      engagements: 1921,
+    },
+  },
+  {
+    channel: Channel.Email,
+    forecastTraffic: 2088,
+    forecastConversions: 29,
+    forecastRevenue: 4385,
+    benchmarkFit: 'Strong Fit',
+    cadenceMultiplier: 1.0,
+    formatMultiplier: 1.1,
+    destinationCVR: 0.014,
+    revenuePerUnit: 365.40,
+    revenuePerHour: 548.10,
+    diagnostics: {
+      type: 'email',
+      sends: 12,
+      openRate: 0.2981,
+      opens: 5214,
+      clickRate: 0.0174,
+      clicks: 2088,
+      conversions: 29.23,
+    },
+  },
+  {
+    channel: Channel.BlogSEO,
+    forecastTraffic: 6400,
+    forecastConversions: 90,
+    forecastRevenue: 13440,
+    benchmarkFit: 'Viable',
+    cadenceMultiplier: 1.0,
+    formatMultiplier: 1.1,
+    destinationCVR: 0.014,
+    revenuePerUnit: 1680,
+    revenuePerHour: 672,
+    diagnostics: {
+      type: 'seo',
+      articles: 8,
+      sessionsPerArticle: 800,
+      seoCVR: 0.014,
+      conversions: 89.6,
+    },
+  },
+];
+
+const placeholderMix: RecommendedChannelMix[] = [
+  { channel: Channel.Instagram, recommendedUnits: 24, currentUnits: 20, delta: 4, revenuePerUnit: 922.50, revenuePerHour: 461.25 },
+  { channel: Channel.TikTok, recommendedUnits: 8, currentUnits: 12, delta: -4, revenuePerUnit: 551.25, revenuePerHour: 330.75 },
+  { channel: Channel.LinkedIn, recommendedUnits: 2, currentUnits: 2, delta: 0, revenuePerUnit: 2016, revenuePerHour: 201.60 },
+  { channel: Channel.Email, recommendedUnits: 14, currentUnits: 12, delta: 2, revenuePerUnit: 365.40, revenuePerHour: 548.10 },
+  { channel: Channel.BlogSEO, recommendedUnits: 10, currentUnits: 8, delta: 2, revenuePerUnit: 1680, revenuePerHour: 672 },
+];
+
+const placeholderWarnings: PlannerWarning[] = [
+  {
+    type: 'underinvested',
+    channel: Channel.Email,
+    reason: 'Email is at 42% of benchmark cadence with above-average conversions per unit',
+    suggestion: 'Increase Email to 8 units/month to reach efficient range',
+  },
+  {
+    type: 'overinvested',
+    channel: Channel.TikTok,
+    reason: 'TikTok is at 133% of benchmark cadence with below-average revenue per unit. Blog / SEO produces higher revenue per hour',
+    suggestion: 'Reduce TikTok to 5 units/month and reallocate hours',
+  },
+];
+
+export const placeholderOutput: PlannerOutput = {
+  channelForecasts: placeholderForecasts,
+  recommendedMix: placeholderMix,
+  warnings: placeholderWarnings,
+  capacityUtilization: 0.87,
+  totalForecastTraffic: 22358,
+  totalForecastConversions: 313,
+  totalForecastRevenue: 46922,
+};
