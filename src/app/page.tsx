@@ -26,6 +26,7 @@ import {
   DiagnosticsPanel,
 } from '@/components/dashboard';
 import ScenarioCompare from '@/components/ScenarioCompare';
+import IndustryBenchmarks from '@/components/IndustryBenchmarks';
 
 const ALL_CHANNELS: Channel[] = [
   Channel.Instagram,
@@ -207,6 +208,12 @@ export default function Home() {
           onObjectiveChange={handleObjectiveChange}
           onHoursChange={setMonthlyAvailableHours}
           onValueChange={setValuePerConversion}
+        />
+
+        {/* Industry Benchmarks — Advanced Controls */}
+        <IndustryBenchmarks
+          industry={industry}
+          objective={objective}
         />
 
         {/* Capacity Indicator */}
