@@ -14,30 +14,30 @@ export default function WarningsPanel({ warnings }: WarningsPanelProps) {
 
   if (warnings.length === 0) {
     return (
-      <section className="bg-surface rounded-lg border border-surface-border">
-        <div className="px-5 py-4 border-b border-surface-border">
-          <h2 className="text-text-primary font-semibold text-sm uppercase tracking-wider">
+      <section className="bg-surface rounded-lg border border-surface-border overflow-hidden h-full">
+        <div className="px-5 py-3.5 border-b border-surface-border">
+          <h2 className="text-text-primary font-semibold text-[11px] uppercase tracking-[0.08em] leading-none">
             Warnings
           </h2>
         </div>
-        <div className="p-5">
-          <p className="text-text-secondary text-sm">No warnings for current plan.</p>
+        <div className="p-5 flex items-center justify-center min-h-[120px]">
+          <p className="text-text-tertiary text-xs">No warnings for current plan</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="bg-surface rounded-lg border border-surface-border">
-      <div className="px-5 py-4 border-b border-surface-border">
-        <h2 className="text-text-primary font-semibold text-sm uppercase tracking-wider">
+    <section className="bg-surface rounded-lg border border-surface-border overflow-hidden h-full">
+      <div className="px-5 py-3.5 border-b border-surface-border">
+        <h2 className="text-text-primary font-semibold text-[11px] uppercase tracking-[0.08em] leading-none">
           Warnings
         </h2>
       </div>
-      <div className="p-5 space-y-4">
+      <div className="p-4 space-y-4">
         {underinvested.length > 0 && (
           <div>
-            <h3 className="text-status-strong text-xs font-semibold uppercase tracking-wider mb-2">
+            <h3 className="text-status-strong text-[10px] font-semibold uppercase tracking-[0.08em] mb-2 leading-none">
               Underinvested Opportunity
             </h3>
             <div className="space-y-2">
@@ -46,16 +46,16 @@ export default function WarningsPanel({ warnings }: WarningsPanelProps) {
                 return (
                   <div
                     key={i}
-                    className="p-3 rounded-md bg-status-strong/5 border border-status-strong/20"
+                    className="px-3.5 py-3 rounded-md bg-status-strong/[0.06] border border-status-strong/[0.15]"
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`w-2 h-2 rounded-full ${accent.bg}`} />
-                      <span className="text-text-primary text-sm font-medium">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`w-1.5 h-1.5 rounded-full ${accent.bg}`} />
+                      <span className="text-text-primary text-[13px] font-medium">
                         {CHANNEL_LABELS[w.channel]}
                       </span>
                     </div>
-                    <p className="text-text-secondary text-xs mb-1">{w.reason}</p>
-                    <p className="text-status-strong text-xs font-medium">{w.suggestion}</p>
+                    <p className="text-text-secondary text-[11px] leading-relaxed mb-1.5 pl-[18px]">{w.reason}</p>
+                    <p className="text-status-strong text-[11px] font-medium pl-[18px]">{w.suggestion}</p>
                   </div>
                 );
               })}
@@ -65,7 +65,7 @@ export default function WarningsPanel({ warnings }: WarningsPanelProps) {
 
         {overinvested.length > 0 && (
           <div>
-            <h3 className="text-status-caution text-xs font-semibold uppercase tracking-wider mb-2">
+            <h3 className="text-status-caution text-[10px] font-semibold uppercase tracking-[0.08em] mb-2 leading-none">
               Overinvested Channel
             </h3>
             <div className="space-y-2">
@@ -74,16 +74,16 @@ export default function WarningsPanel({ warnings }: WarningsPanelProps) {
                 return (
                   <div
                     key={i}
-                    className="p-3 rounded-md bg-status-caution/5 border border-status-caution/20"
+                    className="px-3.5 py-3 rounded-md bg-status-caution/[0.06] border border-status-caution/[0.15]"
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`w-2 h-2 rounded-full ${accent.bg}`} />
-                      <span className="text-text-primary text-sm font-medium">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`w-1.5 h-1.5 rounded-full ${accent.bg}`} />
+                      <span className="text-text-primary text-[13px] font-medium">
                         {CHANNEL_LABELS[w.channel]}
                       </span>
                     </div>
-                    <p className="text-text-secondary text-xs mb-1">{w.reason}</p>
-                    <p className="text-status-caution text-xs font-medium">{w.suggestion}</p>
+                    <p className="text-text-secondary text-[11px] leading-relaxed mb-1.5 pl-[18px]">{w.reason}</p>
+                    <p className="text-status-caution text-[11px] font-medium pl-[18px]">{w.suggestion}</p>
                   </div>
                 );
               })}

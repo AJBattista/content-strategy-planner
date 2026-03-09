@@ -11,23 +11,33 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+
+        // Surface layers
         surface: {
-          DEFAULT: '#1e2130',
-          light: '#262a3d',
-          border: '#2e3348',
+          DEFAULT: '#161925',
+          light: '#1e2130',
+          hover: '#242738',
+          border: '#272b3d',
         },
-        'text-primary': '#e8eaed',
-        'text-secondary': '#8b91a3',
+
+        // Text hierarchy
+        'text-primary': '#e2e4e9',
+        'text-secondary': '#7d8499',
+        'text-tertiary': '#565c6e',
+
+        // Status
         'status-neutral': '#5b8fb9',
         'status-strong': '#4a9e8e',
-        'status-caution': '#c9952c',
-        'status-weak': '#b55454',
-        'channel-instagram': '#b24a7a',
-        'channel-tiktok': '#4a9eb2',
-        'channel-linkedin': '#4a72b2',
-        'channel-email': '#c9952c',
-        'channel-seo': '#3d9e6e',
-        'channel-webinar': '#7a5bb2',
+        'status-caution': '#c49229',
+        'status-weak': '#b05050',
+
+        // Channel accents
+        'channel-instagram': '#a8467a',
+        'channel-tiktok': '#4797a8',
+        'channel-linkedin': '#4670a8',
+        'channel-email': '#b8892a',
+        'channel-seo': '#3a9468',
+        'channel-webinar': '#7356a8',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
