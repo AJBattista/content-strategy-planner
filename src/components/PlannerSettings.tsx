@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Industry,
   BusinessObjective,
@@ -35,6 +36,8 @@ export default function PlannerSettings({
   onValueChange,
 }: PlannerSettingsProps) {
   const profile = getBenchmarkProfile(industry);
+  const [hoursStr, setHoursStr] = useState(String(monthlyAvailableHours));
+  const [valueStr, setValueStr] = useState(String(valuePerConversion));
 
   return (
     <div className="bg-surface rounded-lg p-6">
@@ -79,8 +82,11 @@ export default function PlannerSettings({
             type="number"
             inputMode="decimal"
             min={0}
-            value={monthlyAvailableHours}
-            onChange={(e) => onHoursChange(Math.max(0, Number(e.target.value)))}
+            value={hoursStr}
+            onChange={(e) => {
+              setHoursStr(e.target.value);
+              onHoursChange(Math.max(0, Number(e.target.value) || 0));
+            }}
             className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="e.g. 160"
           />
@@ -94,8 +100,11 @@ export default function PlannerSettings({
             inputMode="decimal"
             min={0}
             step="0.01"
-            value={valuePerConversion}
-            onChange={(e) => onValueChange(Math.max(0, Number(e.target.value)))}
+            value={valueStr}
+            onChange={(e) => {
+              setValueStr(e.target.value);
+              onValueChange(Math.max(0, Number(e.target.value) || 0));
+            }}
             className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="e.g. 50"
           />

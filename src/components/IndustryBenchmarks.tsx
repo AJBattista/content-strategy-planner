@@ -21,16 +21,16 @@ interface IndustryBenchmarksProps {
 }
 
 interface RPCOverrides {
-  floor: number;
-  base: number;
-  ceiling: number;
+  floor: string;
+  base: string;
+  ceiling: string;
 }
 
 interface ChannelBenchmarkOverrides {
-  floor: number;
-  base: number;
-  ceiling: number;
-  spendCap: number;
+  floor: string;
+  base: string;
+  ceiling: string;
+  spendCap: string;
 }
 
 const CHANNEL_DOT_CLASSES: Record<Channel, string> = {
@@ -50,9 +50,9 @@ function deriveRPCDefaults(
   const cvrs = channels.map((ch) => getDefaultCVR(industry, ch, objective));
   const avgCVR = cvrs.length > 0 ? cvrs.reduce((a, b) => a + b, 0) / cvrs.length : 0.02;
   return {
-    floor: Number((avgCVR * 0.5).toFixed(4)),
-    base: Number(avgCVR.toFixed(4)),
-    ceiling: Number((avgCVR * 2.0).toFixed(4)),
+    floor: String(Number((avgCVR * 0.5).toFixed(4))),
+    base: String(Number(avgCVR.toFixed(4))),
+    ceiling: String(Number((avgCVR * 2.0).toFixed(4))),
   };
 }
 
@@ -64,10 +64,10 @@ function deriveChannelDefaults(
   const benchmark = getBenchmarkProfile(industry).channels[channel];
   const cadence = benchmark.benchmarkCadenceMonthly;
   return {
-    floor: Math.round(cadence * 0.5),
-    base: cadence,
-    ceiling: Math.round(cadence * 2.0),
-    spendCap: Math.round(cadence * 1.5),
+    floor: String(Math.round(cadence * 0.5)),
+    base: String(cadence),
+    ceiling: String(Math.round(cadence * 2.0)),
+    spendCap: String(Math.round(cadence * 1.5)),
   };
 }
 
@@ -91,18 +91,18 @@ export default function IndustryBenchmarks({
     return overrides;
   });
 
-  const handleRpcChange = (field: keyof RPCOverrides, value: number) => {
-    setRpc((prev) => ({ ...prev, [field]: Math.max(0, value) }));
+  const handleRpcChange = (field: keyof RPCOverrides, value: string) => {
+    setRpc((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleChannelChange = (
     channel: Channel,
     field: keyof ChannelBenchmarkOverrides,
-    value: number
+    value: string
   ) => {
     setChannelOverrides((prev) => ({
       ...prev,
-      [channel]: { ...prev[channel], [field]: Math.max(0, value) },
+      [channel]: { ...prev[channel], [field]: value },
     }));
   };
 
@@ -142,7 +142,7 @@ export default function IndustryBenchmarks({
                   min={0}
                   step="0.001"
                   value={rpc.floor}
-                  onChange={(e) => handleRpcChange('floor', Number(e.target.value))}
+                  onChange={(e) => handleRpcChange('floor', e.target.value)}
                   className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                   placeholder="0.00"
                 />
@@ -155,7 +155,7 @@ export default function IndustryBenchmarks({
                   min={0}
                   step="0.001"
                   value={rpc.base}
-                  onChange={(e) => handleRpcChange('base', Number(e.target.value))}
+                  onChange={(e) => handleRpcChange('base', e.target.value)}
                   className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                   placeholder="0.00"
                 />
@@ -168,7 +168,7 @@ export default function IndustryBenchmarks({
                   min={0}
                   step="0.001"
                   value={rpc.ceiling}
-                  onChange={(e) => handleRpcChange('ceiling', Number(e.target.value))}
+                  onChange={(e) => handleRpcChange('ceiling', e.target.value)}
                   className="w-full bg-surface-light border border-secondary/20 rounded-md px-3 py-2 min-h-[44px] text-foreground text-sm focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                   placeholder="0.00"
                 />
@@ -202,7 +202,7 @@ export default function IndustryBenchmarks({
                           min={0}
                           value={overrides.floor}
                           onChange={(e) =>
-                            handleChannelChange(channel, 'floor', Number(e.target.value))
+                            handleChannelChange(channel, 'floor', e.target.value)
                           }
                           className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                           placeholder="0"
@@ -216,7 +216,7 @@ export default function IndustryBenchmarks({
                           min={0}
                           value={overrides.base}
                           onChange={(e) =>
-                            handleChannelChange(channel, 'base', Number(e.target.value))
+                            handleChannelChange(channel, 'base', e.target.value)
                           }
                           className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                           placeholder="0"
@@ -230,7 +230,7 @@ export default function IndustryBenchmarks({
                           min={0}
                           value={overrides.ceiling}
                           onChange={(e) =>
-                            handleChannelChange(channel, 'ceiling', Number(e.target.value))
+                            handleChannelChange(channel, 'ceiling', e.target.value)
                           }
                           className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                           placeholder="0"
@@ -244,7 +244,7 @@ export default function IndustryBenchmarks({
                           min={0}
                           value={overrides.spendCap}
                           onChange={(e) =>
-                            handleChannelChange(channel, 'spendCap', Number(e.target.value))
+                            handleChannelChange(channel, 'spendCap', e.target.value)
                           }
                           className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
                           placeholder="0"

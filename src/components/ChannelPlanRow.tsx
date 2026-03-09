@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   Channel,
   ContentFormat,
@@ -24,6 +25,18 @@ export default function ChannelPlanRow({
   const useCustomCVR = plan.destinationCVR !== undefined;
   const displayCVR = useCustomCVR ? (plan.destinationCVR! * 100) : (defaultCVR * 100);
 
+  const [unitsStr, setUnitsStr] = useState(String(plan.monthlyUnits));
+  const [trafficStr, setTrafficStr] = useState(String(plan.trafficPerUnit));
+  const [hoursStr, setHoursStr] = useState(String(plan.productionHours));
+  const [cvrStr, setCvrStr] = useState(String(Number(displayCVR.toFixed(2))));
+
+  // Sync CVR string when default changes externally (industry/objective change or reset button)
+  useEffect(() => {
+    if (!useCustomCVR) {
+      setCvrStr(String(Number((defaultCVR * 100).toFixed(2))));
+    }
+  }, [defaultCVR, useCustomCVR]);
+
   return (
     <div className="px-4 pb-4 pt-1">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -34,8 +47,11 @@ export default function ChannelPlanRow({
             type="number"
             inputMode="decimal"
             min={0}
-            value={plan.monthlyUnits}
-            onChange={(e) => onUpdate({ monthlyUnits: Math.max(0, Number(e.target.value)) })}
+            value={unitsStr}
+            onChange={(e) => {
+              setUnitsStr(e.target.value);
+              onUpdate({ monthlyUnits: Math.max(0, Number(e.target.value) || 0) });
+            }}
             className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
@@ -64,8 +80,11 @@ export default function ChannelPlanRow({
             type="number"
             inputMode="decimal"
             min={0}
-            value={plan.trafficPerUnit}
-            onChange={(e) => onUpdate({ trafficPerUnit: Math.max(0, Number(e.target.value)) })}
+            value={trafficStr}
+            onChange={(e) => {
+              setTrafficStr(e.target.value);
+              onUpdate({ trafficPerUnit: Math.max(0, Number(e.target.value) || 0) });
+            }}
             className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
@@ -79,8 +98,11 @@ export default function ChannelPlanRow({
             inputMode="decimal"
             min={0}
             step="0.5"
-            value={plan.productionHours}
-            onChange={(e) => onUpdate({ productionHours: Math.max(0, Number(e.target.value)) })}
+            value={hoursStr}
+            onChange={(e) => {
+              setHoursStr(e.target.value);
+              onUpdate({ productionHours: Math.max(0, Number(e.target.value) || 0) });
+            }}
             className="w-full bg-background border border-secondary/20 rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums"
             placeholder="0"
           />
@@ -96,9 +118,10 @@ export default function ChannelPlanRow({
               min={0}
               max={100}
               step="0.1"
-              value={Number(displayCVR.toFixed(2))}
+              value={cvrStr}
               onChange={(e) => {
-                const pct = Number(e.target.value);
+                setCvrStr(e.target.value);
+                const pct = Number(e.target.value) || 0;
                 onUpdate({ destinationCVR: Math.max(0, pct / 100) });
               }}
               className={`flex-1 bg-background border rounded px-3 py-1.5 min-h-[44px] text-sm text-foreground focus:outline-none focus:border-status-steel transition-colors tabular-nums ${
@@ -108,10 +131,13 @@ export default function ChannelPlanRow({
             <button
               type="button"
               onClick={() => {
+                const defaultStr = String(Number((defaultCVR * 100).toFixed(2)));
                 if (useCustomCVR) {
                   onUpdate({ destinationCVR: undefined });
+                  setCvrStr(defaultStr);
                 } else {
                   onUpdate({ destinationCVR: defaultCVR });
+                  setCvrStr(defaultStr);
                 }
               }}
               className={`text-xs px-2 py-1.5 rounded transition-colors flex-shrink-0 ${
