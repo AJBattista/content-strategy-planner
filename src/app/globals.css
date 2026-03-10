@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0c0e18;
-  --foreground: #e8eaed;
+  --background: #ECE8E2;
+  --foreground: #1F1F1F;
 }
 
 @layer base {
@@ -20,8 +20,8 @@
   }
 
   ::selection {
-    background: rgba(91, 143, 185, 0.3);
-    color: #e8eaed;
+    background: rgba(158, 47, 47, 0.2);
+    color: #1F1F1F;
   }
 
   ::-webkit-scrollbar {
@@ -32,15 +32,15 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2e3348;
+    background: #C4BDB4;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #3d4260;
+    background: #B0A99F;
   }
 
   *:focus-visible {
-    outline: 2px solid #5b8fb9;
+    outline: 2px solid #9E2F2F;
     outline-offset: 2px;
     border-radius: 2px;
   }
