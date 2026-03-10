@@ -14,39 +14,39 @@ const config: Config = {
 
         // Surface layers
         surface: {
-          DEFAULT: '#161925',
-          light: '#1e2130',
-          hover: '#242738',
-          border: '#272b3d',
+          DEFAULT: '#FFFFFF',
+          light: '#F7F5F2',
+          hover: '#F0EDE8',
+          border: '#D8D2CA',
         },
 
         // Text hierarchy
-        'text-primary': '#e2e4e9',
-        'text-secondary': '#7d8499',
-        'text-tertiary': '#565c6e',
+        'text-primary': '#1F1F1F',
+        'text-secondary': '#5A5A5A',
+        'text-tertiary': '#7A7A7A',
 
         // Legacy alias used by input form components
-        secondary: '#7d8499',
+        secondary: '#5A5A5A',
 
         // Status colors
-        'status-neutral': '#5b8fb9',
-        'status-strong': '#4a9e8e',
-        'status-caution': '#c49229',
-        'status-weak': '#b05050',
+        'status-neutral': '#5B7A94',
+        'status-strong': '#3D7A5C',
+        'status-caution': '#B8862D',
+        'status-weak': '#9E2F2F',
 
         // Legacy status aliases used by input form components
-        'status-steel': '#5b8fb9',
-        'status-teal': '#4a9e8e',
-        'status-amber': '#c49229',
-        'status-red': '#b05050',
+        'status-steel': '#5B7A94',
+        'status-teal': '#3D7A5C',
+        'status-amber': '#B8862D',
+        'status-red': '#9E2F2F',
 
         // Channel accents
-        'channel-instagram': '#a8467a',
-        'channel-tiktok': '#4797a8',
-        'channel-linkedin': '#4670a8',
-        'channel-email': '#b8892a',
-        'channel-seo': '#3a9468',
-        'channel-webinar': '#7356a8',
+        'channel-instagram': '#964270',
+        'channel-tiktok': '#3D7A8A',
+        'channel-linkedin': '#3D5A80',
+        'channel-email': '#C9A96E',
+        'channel-seo': '#4A8C65',
+        'channel-webinar': '#6B5080',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
